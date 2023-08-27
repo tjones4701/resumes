@@ -1,4 +1,4 @@
-import { WebserviceError } from "@/server/lib/webservices/Webservice";
+import { WebserviceError } from "@src/server/lib/webservices/Webservice";
 
 export type Log = {
     type: "error" | "info" | "debug" | "exception";

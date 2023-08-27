@@ -1,6 +1,7 @@
 import { FluentProvider, makeStyles } from "@fluentui/react-components";
 import { darkTheme } from "@src/theme/brownTheme";
 import "./app.css";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const useStyles = makeStyles({
     pageContainer: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
 function MyApp({ Component, pageProps }: any) {
     const styles = useStyles();
     return (
-        <>
+        <UserProvider>
             <FluentProvider theme={darkTheme}>
                 <div className={styles.pageContainer}>
                     <div>
@@ -29,7 +30,7 @@ function MyApp({ Component, pageProps }: any) {
                     </div>
                 </div>
             </FluentProvider>
-        </>
+        </UserProvider>
     );
 }
 

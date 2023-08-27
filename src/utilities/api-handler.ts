@@ -1,10 +1,10 @@
-import { User } from "@/server/user/initialise-user";
 import { NextApiRequest, NextApiResponse } from "next";
 import { forceArray } from "./force-array";
 import { getConfigValue } from "./config";
 import toJson from "./to-json";
 import jwt from "jsonwebtoken";
-import { Roles } from "@/server/user/user";
+import { User } from "@src/lib/auth/user";
+export type Roles = "AUTHENTICATED" | "PUBLIC" | "GLOBAL_ADMIN";
 
 type QueryParameters = "number" | "string" | "boolean";
 
@@ -16,6 +16,7 @@ export type ModelDefinition<T> = {
 
 export type IOptions = {
     description: string;
+    authenticated?: boolean;
     roles: ValidRoles[];
     paths?: string;
     queryParameters?: {
@@ -35,6 +36,7 @@ export type CustomRequest = {
     user: User | null;
     setHeader: (key: string, value: string) => void;
     getQuery: (key: string, value?: string | string[]) => string | string[] | undefined;
+    getData: () => Record<string, any> | null;
 };
 
 export type CustomRequestError = {
@@ -55,7 +57,6 @@ const authPrefix = "Bearer ";
 type ValidRoles = "PUBLIC" | Roles;
 
 function checkRole(user: User | null, roles: ValidRoles | ValidRoles[]) {
-
     const rolesArray = forceArray<ValidRoles>(roles);
     if (rolesArray.includes("PUBLIC")) {
         return true;
@@ -66,7 +67,7 @@ function checkRole(user: User | null, roles: ValidRoles | ValidRoles[]) {
     }
 
     const userRoles = user?.roles?.map((item) => {
-        return item.name.replaceAll(" ","_").toUpperCase();
+        return item.name.replaceAll(" ", "_").toUpperCase();
     });
 
     if (userRoles.length > 0) {
@@ -86,9 +87,8 @@ async function setupUser(req: NextApiRequest): Promise<User | null> {
     if (accessToken.startsWith(authPrefix)) {
         accessToken = accessToken.substr(authPrefix.length);
     }
-    
 
-    const userRaw = req?.cookies["ai-prototype-user"];;
+    const userRaw = req?.cookies["ai-prototype-user"];
     if (userRaw == null) {
         return null;
     }
@@ -131,30 +131,28 @@ export class CsvResponse {
 }
 
 export type FileResponseData = {
-    type : "audio/mp3",
-    length?: number,
-    payload: any
-}
+    type: "audio/mp3";
+    length?: number;
+    payload: any;
+};
 
 export class FileResponse {
     data: FileResponseData;
     constructor(data: FileResponseData) {
         this.data = data;
-    }    
+    }
 }
-
 
 export class RedirectResponse {
     url: string;
     status: number;
-    constructor(url :string, status: 301 | 302 | 308) {
+    constructor(url: string, status: 301 | 302 | 308) {
         this.url = url;
         this.status = status;
-    }    
+    }
 }
 
-
-const supportedRequestTypes = ["GET","POST","PATCH","DELETE"];
+const supportedRequestTypes = ["GET", "POST", "PATCH", "DELETE"];
 export default function apiPageHandler(options: IOptions, callbacks: apiCallback) {
     return async (req: CustomApiRequest, res: NextApiResponse): Promise<void> => {
         const method = req.method?.toUpperCase();
@@ -198,7 +196,10 @@ export default function apiPageHandler(options: IOptions, callbacks: apiCallback
             const user = await setupUser(req);
 
             const roles = options?.roles ?? [];
-            console.log(roles);
+
+            if (options?.authenticated && user == null) {
+                createError(401, "NOT_AUTHORIZED", "You do not have access to this api");
+            }
             const canAccess = checkRole(user, roles as any);
 
             if (!canAccess) {
@@ -215,6 +216,9 @@ export default function apiPageHandler(options: IOptions, callbacks: apiCallback
                 getQuery: (key: string, def: string | string[] | undefined = undefined) => {
                     return req?.query?.[key] ?? def;
                 },
+                getData: () => {
+                    return toJson(req.body) ?? null;
+                },
             };
 
             res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,PATCH");
@@ -230,17 +234,13 @@ export default function apiPageHandler(options: IOptions, callbacks: apiCallback
                 return;
             }
             if (response instanceof FileResponse) {
-                res.status(200)
-                .setHeader("Content-Type", response.data.type)
-                .send(response.data.payload);
+                res.status(200).setHeader("Content-Type", response.data.type).send(response.data.payload);
                 return;
-
             }
 
             if (response instanceof RedirectResponse) {
                 res.redirect(response.status, response.url);
                 return;
-
             }
 
             const responseData = toJson(response);

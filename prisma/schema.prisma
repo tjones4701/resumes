@@ -19,3 +19,13 @@ model Resumes {
 
     @@map("resumse")
 }
+
+
+model Profiles {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    data      Json
+    createdAt DateTime @default(now()) @map("created_at")
+    active    Boolean  @default(true)
+
+    @@map("profiles")
+}
