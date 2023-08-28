@@ -13,7 +13,7 @@ export async function getRoles(userId: string): Promise<UserRole[]> {
         const data = response?.getData();
         return data ?? [];
     } catch (e) {
-        console.log("ERROR", e);
+        console.error("ERROR", e);
         return [];
     }
 }

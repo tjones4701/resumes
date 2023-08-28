@@ -42,6 +42,7 @@ export type ChatCompletionMessage = {
     content: string | string[];
     role: ChatCompletionRequestMessageRoleEnum;
 };
+
 export async function createChatCompletion(
     messages: ChatCompletionMessage[] | ChatCompletionMessage,
     model: Models | undefined = undefined
@@ -80,7 +81,7 @@ export async function createChatCompletion(
         response.price = generatePricing(response, model);
         return response;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return null;
     }
 }

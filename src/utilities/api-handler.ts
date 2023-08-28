@@ -217,7 +217,11 @@ export default function apiPageHandler(options: IOptions, callbacks: apiCallback
                     return req?.query?.[key] ?? def;
                 },
                 getData: () => {
-                    return toJson(req.body) ?? null;
+                    // Check if req.body is json.
+                    if (req.headers["content-type"]?.includes("application/json")) {
+                        return req.body;
+                    }
+                    return toJson(req.body, null) ?? null;
                 },
             };
 
@@ -243,7 +247,7 @@ export default function apiPageHandler(options: IOptions, callbacks: apiCallback
                 return;
             }
 
-            const responseData = toJson(response);
+            const responseData = toJson(response, null);
             if (responseData == null) {
                 returnStringOrObjectOrBuffer(res, response);
             } else {

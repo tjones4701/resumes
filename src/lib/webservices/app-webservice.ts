@@ -7,8 +7,6 @@ for (const i in ApiCodes) {
     ApplicationConfig.add(i, ApiCodes[i]);
 }
 
-console.log(ApplicationConfig);
-
 export class ResumesWebserviceResponse {
     request: any = null;
     wasCached = false;

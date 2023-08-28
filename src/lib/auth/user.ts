@@ -36,7 +36,7 @@ export async function getRoles(userId: string): Promise<UserRole[]> {
         const data = response?.getData();
         return data ?? [];
     } catch (e) {
-        console.log("ERROR", e);
+        console.error("ERROR", e);
         return [];
     }
 }
@@ -70,7 +70,6 @@ export async function createOrUpdateUserAuthentication(userData: Claims) {
     let user = await getOrCreateUser(userAuthentication?.id);
 
     if (userAuthentication == null) {
-        console.log(user.id);
         return await prisma.usersAuthentications.create({
             data: {
                 subscriptionId: userData.sub,

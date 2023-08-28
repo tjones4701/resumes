@@ -8,7 +8,14 @@ export type JobHistory = {
     end_date?: string;
 };
 
+export type ProfileSkills = {
+    category: string;
+    name: string;
+    level: "High" | "Medium" | "Low";
+};
+
 export type Profile = {
+    email?: string;
     name?: string;
     current_title?: string;
     summary?: string;
@@ -18,7 +25,9 @@ export type Profile = {
         url: string;
     }[];
     job_history: {};
+    skills: ProfileSkills[];
 };
+
 export async function getProfiles() {
     const ws = ResumeWS("PROFILES");
     const response = await ws.get();

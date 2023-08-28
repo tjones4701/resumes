@@ -1,4 +1,4 @@
-export type ResumeApiCodes = "PROFILES" | "ME" | "PROFILE" | "AI_PROFILE";
+export type ResumeApiCodes = "PROFILES" | "ME" | "PROFILE" | "AI_PROFILE" | "AI_JOB" | "JOB" | "JOBS";
 export type ApiConfigDefinition = {
     url: string;
     requiresAuthentication?: boolean;
@@ -17,8 +17,17 @@ const ApiConfigurations: Record<string, Record<ResumeApiCodes, ApiConfigDefiniti
         PROFILE: {
             url: "profiles/:id",
         },
+        JOBS: {
+            url: "jobs",
+        },
+        JOB: {
+            url: "jobs/:id",
+        },
         AI_PROFILE: {
             url: "ai/profile",
+        },
+        AI_JOB: {
+            url: "ai/jobs",
         },
     },
 };

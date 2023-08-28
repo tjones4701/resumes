@@ -21,7 +21,6 @@ export async function generateUserJwt(id: string, expiresAt: number) {
     const user = await initialiseUser(id, expiresAt);
     const now = Math.round(Date.now() / 1000);
     const duration = expiresAt - now;
-    console.log(duration);
     const token = jwt.sign(user, getConfigValue("AUTH_JWT_SECRET"), { expiresIn: duration });
     return token;
 }

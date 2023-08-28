@@ -1,6 +1,5 @@
 import { Logger } from "./logger";
 
-
 class StorageItem {
     value: any;
     key: string;
@@ -157,8 +156,8 @@ export class LocalStore {
                     const val = JSON.parse(localStoreString);
                     return new StorageItem(this, key, val.value, val.expiry);
                 }
-            } catch (e) { 
-                console.log(e)
+            } catch (e) {
+                console.error(e);
             }
         }
         return null;
@@ -239,7 +238,7 @@ export class LocalStore {
         try {
             const localStoreKey = this.generateKey(key);
             localStorage.removeItem(localStoreKey);
-        } catch (e) { }
+        } catch (e) {}
     }
 
     getAllStorageItemKeys(): string[] {
@@ -269,7 +268,7 @@ export class LocalStore {
             try {
                 const val = this.get(itemKey);
                 values[itemKey] = val;
-            } catch (e) { }
+            } catch (e) {}
         }
         return values;
     }
@@ -286,7 +285,7 @@ export class LocalStore {
                 if (storageItemKey != null) {
                     storageItems[storageItemKey] = storageItem;
                 }
-            } catch (e) { }
+            } catch (e) {}
         }
 
         return storageItems;

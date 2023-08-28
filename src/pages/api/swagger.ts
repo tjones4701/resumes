@@ -10,8 +10,6 @@ function getApiFiles(dir: string): string[] {
     fs.readdirSync(dir).forEach((file) => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-
-        console.log(filePath);
         if (stat.isDirectory()) {
             files = files.concat(getApiFiles(filePath));
         } else if (path.extname(filePath) === ".ts") {
@@ -30,7 +28,6 @@ function loadApiDefinitions() {
         try {
             const filePath = path.resolve(baseApiPath, files[i]);
             const definition = require(filePath);
-            console.log(definition);
         } catch (e) {
             console.warn(e);
         }

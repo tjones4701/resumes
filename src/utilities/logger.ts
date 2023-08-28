@@ -1,4 +1,4 @@
-import { WebserviceError } from "@src/server/lib/webservices/Webservice";
+import { WebserviceError } from "@src/lib/webservices/Webservice";
 
 export type Log = {
     type: "error" | "info" | "debug" | "exception";
@@ -51,7 +51,7 @@ export const Logger = {
                 }
                 break;
             case "info":
-                console.log(log);
+                console.info(log);
                 break;
             case "debug":
                 console.debug(log);

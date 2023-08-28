@@ -16,21 +16,20 @@ const ProfileAssistant: React.FC = function (props) {
     const submitForm = async (data: any) => {
         setIsLoading(true);
         try {
-            const aiProfileResponse = await ResumeWS("AI_PROFILE").post({
-                user_summary: data?.user_summary
+            const aiResponse = await ResumeWS("AI_JOB").post({
+                job_summary: data?.job_summary
             });
-            setResponse(aiProfileResponse?.getData());
+            console.log(aiResponse);
+            setResponse(aiResponse?.getData());
         } catch (e) {
             console.warn(e);
         }
         setIsLoading(false);
     }
-
-    console.log(response);
     return (
         <>
             <QuickForm loading={isLoading} disabled={isLoading} onSubmit={submitForm}>
-                <FEInput label={"Tell us about yourself to create a profile."} type="textarea" name="user_summary" />
+                <FEInput label={"Tell us about the job you are looking to apply for."} type="textarea" name="job_summary" />
             </QuickForm>
             <hr />
         </>
@@ -39,11 +38,11 @@ const ProfileAssistant: React.FC = function (props) {
 
 const Page: React.FC = function (props) {
     const { query } = useRouter();
-    const profileId = query?.profileId?.toString();
-    const isNew = profileId == "new";
+    const jobId = query?.jobId?.toString();
+    const isNew = jobId == "new";
 
-    const { value: profile, loading } = useResumeWSGet(isNew ? undefined : "PROFILE", {
-        profileId: profileId
+    const { value: item, loading } = useResumeWSGet(isNew ? undefined : "JOB", {
+        id: jobId
     });
 
     if (loading) {
@@ -52,7 +51,7 @@ const Page: React.FC = function (props) {
 
     return (
         <Container>
-            <ContainerHeader level={1}>Create New Profile</ContainerHeader>
+            <ContainerHeader level={1}>Create New Job</ContainerHeader>
             <ContainerSection>
                 <ProfileAssistant />
 
