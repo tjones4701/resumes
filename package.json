@@ -1,38 +1,45 @@
 {
-  "name": "nextjs",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@auth0/nextjs-auth0": "^3.1.0",
-    "@fluentui/react-components": "^9.29.4",
-    "@types/node": "20.5.1",
-    "@types/react": "18.2.20",
-    "@types/react-dom": "18.2.7",
-    "autoprefixer": "10.4.15",
-    "axios": "^1.4.0",
-    "chroma.ts": "^1.0.10",
-    "cookies-next": "^3.0.0",
-    "dotenv-cli": "^7.3.0",
-    "eslint": "8.47.0",
-    "eslint-config-next": "13.4.19",
-    "jsonwebtoken": "^9.0.1",
-    "next": "13.4.19",
-    "openai": "^4.1.0",
-    "openai-edge": "^1.2.2",
-    "prettier": "^3.0.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-hook-form": "^7.45.4",
-    "react-use": "^17.4.0",
-    "typescript": "5.1.6"
-  },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.2"
-  }
+    "name": "nextjs",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "tsc-test": "tsc --noEmit",
+        "prisma-dev": "dotenv -e .env.development.local prisma migrate dev ",
+        "prisma-migrate": "dotenv -e .env.development.local prisma migrate deploy ",
+        "prisma-generate": "prisma generate ",
+        "prisma-update": "npm run prisma-dev && npm run prisma-generate"
+    },
+    "dependencies": {
+        "@auth0/nextjs-auth0": "^3.1.0",
+        "@fluentui/react-components": "^9.29.4",
+        "@prisma/client": "^5.2.0",
+        "@types/node": "20.5.1",
+        "@types/react": "18.2.20",
+        "@types/react-dom": "18.2.7",
+        "autoprefixer": "10.4.15",
+        "axios": "^1.4.0",
+        "chroma.ts": "^1.0.10",
+        "cookies-next": "^3.0.0",
+        "dotenv-cli": "^7.3.0",
+        "eslint": "8.47.0",
+        "eslint-config-next": "13.4.19",
+        "jsonwebtoken": "^9.0.1",
+        "next": "13.4.19",
+        "openai": "^4.1.0",
+        "openai-edge": "^1.2.2",
+        "prettier": "^3.0.2",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-hook-form": "^7.45.4",
+        "react-use": "^17.4.0",
+        "typescript": "5.1.6"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.2",
+        "prisma": "^5.2.0"
+    }
 }
